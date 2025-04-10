@@ -8,6 +8,7 @@ const fetchCharacters = async (page = 1) => {
     try {
         const response = await fetch('https://dattebayo-api.onrender.com/characters')
         const data = await response.json()
+        
         const characters = data.slice(0, 20);
 
         const start = (page - 1) * characters_per_page;
@@ -38,5 +39,37 @@ const renderCards = async (page) => {
       `;
       
       container.appendChild(card);
-    });
+    })
+}
+
+const renderPagination = () => {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = ''; 
+  
+    // boton de echar pa atras
+    const prevButton = document.createElement('button');
+    prevButton.textContent = 'Anterior';
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener('click', () => changePage(currentPage - 1));
+    pagination.appendChild(prevButton);
+  
+    // boton de pagina
+    for (let i = 1; i <= totalPages; i++) {
+      const pageButton = document.createElement('button');
+      pageButton.textContent = i;
+      pageButton.classList.toggle('active', i === currentPage);
+      pageButton.addEventListener('click', () => changePage(i));
+      pagination.appendChild(pageButton);
+    }
+  
+    // boton de echar pa adelante
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Siguiente';
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.addEventListener('click', () => changePage(currentPage + 1));
+    pagination.appendChild(nextButton);
   };
+  
+fetchCharacters()
+renderCards();
+renderPagination()

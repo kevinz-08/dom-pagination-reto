@@ -17,5 +17,26 @@ const fetchCharacters = async (page = 1) => {
     } catch (error) {
         console.error(error); return [];
     }
-    
 }
+
+const renderCards = async (page) => {
+    const characters = await fetchCharacters(page);
+    const container = document.getElementById('cards-container');
+    container.innerHTML = '';
+  
+    characters.forEach(character => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      
+      card.innerHTML = `
+        <img class="card-image" src="${character.image}" alt="${character.name}" />
+        <div class="card-content">
+          <h2 class="card-title">${character.name}</h2>
+          <p class="card-head">Aldea: ${character.village}</p>
+          <p class="card-description">Chakra: ${character.chakraType}</p>
+        </div>
+      `;
+      
+      container.appendChild(card);
+    });
+  };
